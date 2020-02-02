@@ -2,9 +2,9 @@ use Mix.Config
 
 # Configure your database
 config :rocker_assignment, RockerAssignment.Repo,
-  username: "postgres",
-  password: "postgres",
-  database: "rocker_assignment_dev",
+  username: "rocker_user",
+  password: "rocker",
+  database: "rocker_dev",
   hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10

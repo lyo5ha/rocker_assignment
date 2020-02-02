@@ -2,8 +2,8 @@ use Mix.Config
 
 # Configure your database
 config :rocker_assignment, RockerAssignment.Repo,
-  username: "postgres",
-  password: "postgres",
+  username: "rocker_user",
+  password: "rocker",
   database: "rocker_assignment_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox

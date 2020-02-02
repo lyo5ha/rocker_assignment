@@ -1,3 +1,158 @@
+# Startup application
+
+## Requirements
+
+```
+elixir 1.10.0
+erlang 22.2.4
+phoenix 1.4.12
+postgresql 11.6
+```
+- How to install erlang with asdf [asdf erlang](https://github.com/asdf-vm/asdf-erlang)
+- How to install elixir with asdf [asdf elixir](https://github.com/asdf-vm/asdf-elixir)
+
+```
+psql user:      rocker_user
+psql password:  rocker
+
+user must be allowed to create databases and tables
+```
+
+## How to start project
+
+```
+$ git clone git@github.com:lyo5ha/rocker_assignment.git
+$ mix deps.get
+$ mix ecto.migrate
+
+$ mix phx.start
+```
+Server will be available on `localhost:4000/`
+
+
+# API endpoins/examples
+
+## Create new loan
+### POST request to `/api/v1/loan/new`
+
+``` json
+Content-Type: application/json
+
+{
+  "jsonapi": {
+    "version": "1.0"
+  },
+  "data": {
+    "type": "loan",
+    "amount": "3056",
+    "status": "new",
+    "user": {
+      "name": "Jhon Jhonson",
+      "phone": "+3827777777",
+      "email": "hello@hello.com"
+    }
+  }
+}
+
+```
+
+### Responses
+
+``` json
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "jsonapi": {
+    "version": "1.0"
+  },
+  "data": {
+    "type": "loan",
+    "id": "101",
+    "status": "ACCEPTED",
+    "rate": 5.5
+  }
+}
+
+```
+
+``` json
+HTTP/1.1 422 Unprocessable Entity
+Content-Type: application/json
+
+{
+  "jsonapi": {
+    "version": "1.0"
+  },
+  "errors": [
+    {
+      "status": "422",
+      "source": "/api/v1/new_loan"
+      "title": "Invalid Attribute",
+      "detail": "Invalid email address"
+    }
+  ]
+}
+
+```
+
+## List all loans
+### GET request to `/api/v1/loan/all`
+
+### Response
+
+``` json
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "jsonapi": {
+    "version": "1.0"
+  },
+  "data": [
+    {
+      "type": "loan",
+      "amount": "3056",
+      "id": "101",
+      "user": {
+          "name": "Jhon Jhonson",
+          "phone": "+3827777777",
+          "email": "hello@hello.com"
+       },
+      "status": "ACCEPTED",
+      "rate": 5.5
+    },
+    {
+      "type": "loan",
+      "amount": "4057",
+      "id": "102",
+      "user": {
+          "name": "Jack Jackson",
+          "phone": "+3829999999",
+          "email": "buybuy@buybuy.com"
+      },
+    "status": "ACCEPTED",
+    "rate": 5.3
+    },
+    {
+      "type": "loan",
+      "amount": "5059",
+      "id": "103",
+      "user": {
+          "name": "Bill Billson",
+          "phone": "+38233333333",
+          "email": "morning@morning.com"
+      },
+      "status": "REJECTED"
+     }
+  ]
+}
+
+```
+
+
+
+
 # Technical Assignment - Elixir
 
 FooBank, a fictional financial services company, based in Athens,
