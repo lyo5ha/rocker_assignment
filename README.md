@@ -93,7 +93,7 @@ Content-Type: application/json
   "errors": [
     {
       "status": "422",
-      "source": "/api/v1/new_loan",
+      "source": "/api/v1/loan/new",
       "title": "Invalid Attribute",
       "detail": "Invalid email address"
     }

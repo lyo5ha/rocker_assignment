@@ -10,13 +10,18 @@ defmodule RockerAssignmentWeb.LoanApplicationController do
   """
 
   def new(conn, params) do
-    with {:ok, valid_params}  <- Validate.params(params),
-         {:ok, valid_loan}    <- LoanInteractor.new_loan(valid_params) do
-      conn |> LoanInteractor.send_response(valid_loan)
-    else
-      {:error, error_params} ->
-        conn |> ErrorResolver.call(error_params)
+    case LoanInteractor.new_loan(params) do
+      {:ok, valid_params}     -> conn |> LoanInteractor.send_response(valid_params)
+      {:error, error_params}  -> conn |> ErrorResolver.call(error_params)
     end
+
+    # with {:ok, valid_params}  <- Validate.params(params),
+    #      {:ok, valid_loan}    <- LoanInteractor.new_loan(valid_params) do
+    #   conn |> LoanInteractor.send_response(valid_loan)
+    # else
+    #   {:error, error_params} ->
+    #     conn |> ErrorResolver.call(error_params)
+    # end
   end
 
   # def all(conn, _params) do
