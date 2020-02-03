@@ -6,7 +6,6 @@ defmodule RockerAssignment.Schema.User do
   alias RockerAssignment.Schema.User
 
   schema "users" do
-    field  :uuid,  :string
     field  :name,  :string
     field  :email, :string
     field  :phone, :string

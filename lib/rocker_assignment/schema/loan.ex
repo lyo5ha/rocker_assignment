@@ -6,7 +6,6 @@ defmodule RockerAssignment.Schema.Loan do
   alias RockerAssignment.Schema.Loan
 
   schema "loans" do
-    field  :uuid,   :string
     field  :status, :string
     field  :amount, :integer
     field  :rate,   :integer

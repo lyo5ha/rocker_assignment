@@ -39,6 +39,8 @@ Server will be available on `localhost:4000/`
 # API endpoins/examples
 
 ## Create new loan
+For demonstration purpose assumed that "amount" field is always in integer format and represents loan amount in cents.
+
 #### POST request to `/api/v1/loan/new`
 
 ``` json
@@ -50,7 +52,7 @@ Content-Type: application/json
   },
   "data": {
     "type": "loan",
-    "amount": "3056",
+    "amount": 3056,
     "status": "NEW",
     "user": {
       "name": "Jhon Jhonson",
