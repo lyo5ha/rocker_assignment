@@ -10,8 +10,8 @@ defmodule RockerAssignmentWeb.Router do
       scope "/loan" do
         pipe_through :api
 
-        post "new",  LoanApplicationController, :new
-        get  "all",  LoanApplicationController, :all
+        post "/new",  LoanApplicationController, :new
+        get  "/all",  LoanApplicationController, :all
       end
     end
   end

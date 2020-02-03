@@ -10,8 +10,13 @@ postgresql 11.6
 ```
 - How to install erlang with asdf [asdf erlang](https://github.com/asdf-vm/asdf-erlang)
 - How to install elixir with asdf [asdf elixir](https://github.com/asdf-vm/asdf-elixir)
+- How to install Phoenix [documentation](https://hexdocs.pm/phoenix/installation.html)
+
+
 
 ```
+# for development/demonstratoin purpose only!
+
 psql user:      rocker_user
 psql password:  rocker
 
@@ -23,6 +28,7 @@ user must be allowed to create databases and tables
 ```
 $ git clone git@github.com:lyo5ha/rocker_assignment.git
 $ mix deps.get
+$ mix ecto.create
 $ mix ecto.migrate
 
 $ mix phx.start
@@ -33,7 +39,7 @@ Server will be available on `localhost:4000/`
 # API endpoins/examples
 
 ## Create new loan
-### POST request to `/api/v1/loan/new`
+#### POST request to `/api/v1/loan/new`
 
 ``` json
 Content-Type: application/json
@@ -45,7 +51,7 @@ Content-Type: application/json
   "data": {
     "type": "loan",
     "amount": "3056",
-    "status": "new",
+    "status": "NEW",
     "user": {
       "name": "Jhon Jhonson",
       "phone": "+3827777777",
@@ -56,7 +62,7 @@ Content-Type: application/json
 
 ```
 
-### Responses
+#### Responses
 
 ``` json
 HTTP/1.1 200 OK
@@ -87,7 +93,7 @@ Content-Type: application/json
   "errors": [
     {
       "status": "422",
-      "source": "/api/v1/new_loan"
+      "source": "/api/v1/new_loan",
       "title": "Invalid Attribute",
       "detail": "Invalid email address"
     }
@@ -97,9 +103,9 @@ Content-Type: application/json
 ```
 
 ## List all loans
-### GET request to `/api/v1/loan/all`
+#### GET request to `/api/v1/loan/all`
 
-### Response
+#### Response
 
 ``` json
 HTTP/1.1 200 OK
