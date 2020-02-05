@@ -16,15 +16,10 @@ defmodule RockerAssignment.Schema.Transactions do
     |> Repo.insert()
   end
 
-  def create_loan(attrs \\ %{}) do
-    %Loan{}
-    |> Loan.changeset(attrs)
+  def create_loan(user, %{amount: amount}) do
+    user
+    |> Ecto.build_assoc(:loans, %{status: "NEW", amount: amount})
     |> Repo.insert()
-  end
-
-  def create_loan(user, loan) do
-    logger(user, "user from create_loan")
-    logger(loan, "loan from create_loan")
   end
 
   def get_user(%{email: email} = _params),  do: Repo.get_by(User, email: email)

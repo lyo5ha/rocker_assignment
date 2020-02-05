@@ -4,14 +4,14 @@ defmodule RockerAssignment.LoanInteractor do
   """
   import RockerAssignment.Utils.Debug
   alias RockerAssignment.Schema.{User, Loan, Transactions}
-  alias RockerAssignment.BusinessLogic
+  alias RockerAssignment.CreditRegulation
 
   def new_loan(params) do
     map = parse_params(params)
     valid_loan = %{some: "loan_infirmation"}
     with {:ok, user}            <- get_user(map),
          {:ok, loan}            <- Transactions.create_loan(user, map),
-         {:ok, processed_loan}  <- BusinessLogic.process_loan(loan),
+         {:ok, processed_loan}  <- CreditRegulation.apply(loan),
          {:ok, response_params} <- serialize_response(processed_loan) do
       {:ok, response_params}
     else
@@ -21,17 +21,15 @@ defmodule RockerAssignment.LoanInteractor do
   end
 
   defp get_user(map) do
-    case Transactions.get_user(struct) do
-        nil  ->
-          user = Transactions.create_user(struct)
-          {:ok, user}
-        user -> check_name(user, struct)
-      end
+    case Transactions.get_user(map) do
+      nil  -> Transactions.create_user(map)
+      user -> check_name(user, map)
+    end
   end
 
-  defp check_name(%{name: saved_name}, %{name: params_name}) do
+  defp check_name(%{name: saved_name} = user, %{name: params_name}) do
     case saved_name == params_name do
-      true  -> {:ok, saved_name}
+      true  -> {:ok, user}
       false -> {:error, "Name is not valid for existing email"}
     end
   end

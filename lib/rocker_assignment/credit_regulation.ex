@@ -1,4 +1,4 @@
-defmodule RockerAssignment.BusinessLogic do
+defmodule RockerAssignment.CreditRegulation do
   @moduledoc """
   Module which implement logic for loan issuing.
   Covers following requirements:
@@ -14,8 +14,14 @@ defmodule RockerAssignment.BusinessLogic do
 
   import RockerAssignment.Utils.Debug
 
-  def process_loan(loan) do
-    logger(loan, "loan from process_loan")
+  def apply(%{amount: amount} = loan) do
+    with {:ok, rate}          <- AmountServer.check(amount),
+         {:ok, rate}          <- PrimeNumbers.check(amount),
+         {:ok, updated_loan}  <- Transactions.update_loan(loan, rate) do
+      {:ok, updated_loan}
+    else
+      {:error, error} ->
+        logger(error, "from apply")
+    end
   end
-
 end
