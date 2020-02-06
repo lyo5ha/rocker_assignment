@@ -2,10 +2,13 @@ defmodule RockerAssignment.CheckPrime.Jacobian do
   @moduledoc """
   Module for calculating Jacobian symbol a/n
   """
+  import RockerAssignment.Utils.Debug
 
   def calculate(a, n) do
     cond do
       a == 0 -> 0
+      Integer.mod(n, 2) == 0 -> 0
+      a == n -> 0
       n > a and Integer.mod(n, 2) == 1 ->
         pid = start_state(a, n)
         result = main_loop(pid)

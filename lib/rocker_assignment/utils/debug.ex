@@ -8,7 +8,7 @@ defmodule RockerAssignment.Utils.Debug do
   end
 
   def logger(something, text) do
-    Logger.warn("\n\n\n==============>>>>>>  #{text}  <<<<<<==============\n\n#{inspect(something, pretty: true)}")
+    Logger.warn("\n==============>>>>>>  #{text}  \n#{inspect(something, pretty: true)}")
     something
   end
 end
