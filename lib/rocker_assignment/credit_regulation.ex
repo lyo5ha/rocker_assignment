@@ -11,17 +11,34 @@ defmodule RockerAssignment.CreditRegulation do
   3. Otherwise, a loan is offered with random interest rate between 4%
   and 12%.
   """
-
-  import RockerAssignment.Utils.Debug
+  alias RockerAssignment.Schema.Transactions
+  alias RockerAssignment.CheckPrime
 
   def apply(%{amount: amount} = loan) do
-    with {:ok, rate}          <- AmountServer.check(amount),
-         {:ok, rate}          <- PrimeNumbers.check(amount),
-         {:ok, updated_loan}  <- Transactions.update_loan(loan, rate) do
+    with {:ok, confirmed_amount}  <- amount_check(amount, loan),
+         {:ok, rate}              <- prime_check(confirmed_amount),
+         {:ok, updated_loan}      <- Transactions.update_loan(loan, rate) do
       {:ok, updated_loan}
     else
-      {:error, error} ->
-        logger(error, "from apply")
+      {:error, loan} ->
+        rejected_loan = Transactions.reject_loan(loan)
+        {:ok, rejected_loan}
+    end
+  end
+
+  defp amount_check(amount, loan) do
+    cond do
+      GenServer.call({:global, :amount_server}, :get) < amount ->
+        GenServer.cast({:global, :amount_server}, {:put, amount})
+        {:ok, amount}
+      true -> {:error, loan}
+    end
+  end
+
+  defp prime_check(amount) do
+    case CheckPrime.prime?(amount) do
+      true   -> {:ok, 999}
+      false  -> {:ok, Enum.random(400..1200)}
     end
   end
 end

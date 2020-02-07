@@ -6,6 +6,7 @@ defmodule RockerAssignment.Schema.Loan do
   alias RockerAssignment.Schema.Loan
 
   schema "loans" do
+    # field  :id,     :string
     field  :status, :string
     field  :amount, :integer
     field  :rate,   :integer
@@ -17,6 +18,6 @@ defmodule RockerAssignment.Schema.Loan do
   def changeset(%Loan{} = loan, attrs) do
     loan
     |> cast(attrs, ~w(status amount rate)a)
-    |> validate_required(~w(status amount))
+    |> validate_required(~w(status amount)a)
   end
 end

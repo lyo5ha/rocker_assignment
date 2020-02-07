@@ -5,7 +5,6 @@ defmodule RockerAssignment.Schema.Transactions do
 
   alias RockerAssignment.Repo
   alias RockerAssignment.Schema.{User, Loan}
-  import RockerAssignment.Utils.Debug
 
   @doc """
   Creates a user.
@@ -22,10 +21,20 @@ defmodule RockerAssignment.Schema.Transactions do
     |> Repo.insert()
   end
 
+  def update_loan(%Loan{} = loan, rate) do
+    loan |> Repo.preload(:user)
+    loan
+    |> Repo.preload(:user)
+    |> Loan.changeset(%{rate: rate, status: "ACCEPTED"})
+    |> Repo.update()
+  end
+
+  def reject_loan(%Loan{} = loan) do
+    loan
+    |> Repo.preload(:user)
+    |> Loan.changeset(%{status: "REJECTED"})
+    |> Repo.update()
+  end
+
   def get_user(%{email: email} = _params),  do: Repo.get_by(User, email: email)
-
-  def get_user(id),  do: Repo.get(User, id)
-
-  def get_loan(id),  do: Repo.get(Loan, id)
-
 end

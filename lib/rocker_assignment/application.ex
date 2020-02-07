@@ -11,9 +11,10 @@ defmodule RockerAssignment.Application do
       # Start the Ecto repository
       RockerAssignment.Repo,
       # Start the endpoint when the application starts
-      RockerAssignmentWeb.Endpoint
+      RockerAssignmentWeb.Endpoint,
       # Starts a worker by calling: RockerAssignment.Worker.start_link(arg)
       # {RockerAssignment.Worker, arg},
+      {RockerAssignment.AmountServer, %{}}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

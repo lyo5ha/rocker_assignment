@@ -52,26 +52,26 @@ defmodule RockerAssignment.CheckPrime.Jacobian do
   end
 
   defp start_state(a, n) do
-    {:ok, pid} = Agent.start_link(fn() -> %{ans: 1, a: a, n: n} end)
+    {:ok, pid} = Agent.start_link(fn()  -> %{ans: 1, a: a, n: n} end)
     pid
   end
   defp ans_swap(pid) do
-    Agent.update(pid, fn(map) -> Map.put(map, :ans, -(map[:ans])) end)
+    Agent.update(pid, fn(map)  -> Map.put(map, :ans, -(map[:ans])) end)
   end
   defp ans_get(pid) do
-    Agent.get(pid, fn(%{ans: ans}) -> ans end)
+    Agent.get(pid, fn(map)     -> Map.get(map, :ans) end)
   end
   defp a_get(pid) do
-    Agent.get(pid, fn(map) -> Map.get(map, :a) end)
+    Agent.get(pid, fn(map)     -> Map.get(map, :a) end)
   end
   defp a_put(pid, a) do
-    Agent.update(pid, fn(map) -> Map.put(map, :a, a) end)
+    Agent.update(pid, fn(map)  -> Map.put(map, :a, a) end)
   end
   defp n_put(pid, n) do
-    Agent.update(pid, fn(map) -> Map.put(map, :n, n) end)
+    Agent.update(pid, fn(map)  -> Map.put(map, :n, n) end)
   end
   defp n_get(pid) do
-    Agent.get(pid, fn(map) -> Map.get(map, :n) end)
+    Agent.get(pid, fn(map)     -> Map.get(map, :n) end)
   end
   defp an_swap(pid, a, n) do
     a_put(pid, n)

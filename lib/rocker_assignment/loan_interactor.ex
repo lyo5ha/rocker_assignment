@@ -2,13 +2,11 @@ defmodule RockerAssignment.LoanInteractor do
   @moduledoc """
   Interactor for loan creation.
   """
-  import RockerAssignment.Utils.Debug
-  alias RockerAssignment.Schema.{User, Loan, Transactions}
+  alias RockerAssignment.Schema.Transactions
   alias RockerAssignment.CreditRegulation
 
   def new_loan(params) do
     map = parse_params(params)
-    valid_loan = %{some: "loan_infirmation"}
     with {:ok, user}            <- get_user(map),
          {:ok, loan}            <- Transactions.create_loan(user, map),
          {:ok, processed_loan}  <- CreditRegulation.apply(loan),
@@ -16,7 +14,7 @@ defmodule RockerAssignment.LoanInteractor do
       {:ok, response_params}
     else
       {:error, error} ->
-        logger(error, "error from new loan")
+        {:error, error}
     end
   end
 
@@ -30,7 +28,7 @@ defmodule RockerAssignment.LoanInteractor do
   defp check_name(%{name: saved_name} = user, %{name: params_name}) do
     case saved_name == params_name do
       true  -> {:ok, user}
-      false -> {:error, "Name is not valid for existing email"}
+      false -> {:error, {:message, "Name is not valid for existing email"}}
     end
   end
 
@@ -43,11 +41,35 @@ defmodule RockerAssignment.LoanInteractor do
       }
   end
 
-  defp serialize_response(loan) do
-    logger(loan, "loan form serialize response")
+
+  defp serialize_response({:ok, loan} = _params) do
+    %{
+        jsonapi: %{version: "1.0"},
+        data: %{
+          type: "loan",
+          id: loan.id,
+          status: loan.status,
+          rate: nil
+        }
+      }
+    |> Jason.encode
+  end
+  defp serialize_response(params) do
+    %{
+        jsonapi: %{version: "1.0"},
+        data: %{
+          type: "loan",
+          id: params.id,
+          status: params.status,
+          rate: params.rate/100
+        }
+      }
+    |> Jason.encode
   end
 
-  def send_response(params) do
-    logger(params, "params from send_response")
+  def send_response(conn, json) do
+    conn
+    |> Plug.Conn.put_resp_header("content-type", "application/json; charset=utf-8")
+    |> Plug.Conn.send_resp(200, json)
   end
 end

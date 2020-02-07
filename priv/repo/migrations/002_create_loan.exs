@@ -4,12 +4,15 @@ defmodule RockerAssignment.Repo.Migrations.CreateLoan do
   def change do
     create table(:loans) do
 
+      # add  :id,         :string
       add  :status,     :string
       add  :amount,     :integer
       add  :rate,       :integer
       add  :user_id,    references(:users)
 
+
       timestamps()
+
     end
   end
 end

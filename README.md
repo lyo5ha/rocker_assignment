@@ -85,6 +85,24 @@ Content-Type: application/json
 ```
 
 ``` json
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "jsonapi": {
+    "version": "1.0"
+  },
+  "data": {
+    "type": "loan",
+    "id": "101",
+    "status": "REJECTED",
+    "rate": null
+  }
+}
+
+```
+
+``` json
 HTTP/1.1 422 Unprocessable Entity
 Content-Type: application/json
 

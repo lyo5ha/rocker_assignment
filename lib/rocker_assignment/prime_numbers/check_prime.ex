@@ -3,13 +3,13 @@ defmodule RockerAssignment.CheckPrime do
   Module for checking if number is prime number or composite number.
   There is a implementation of Solovay–Strassen primality test,
   which is  probabilistic. Chance of wrong answer with 30 iterations
-  will be 1 of 1073741824, which could be consider as sufficient.
+  will be 1 of 1073741824, which could be considered as sufficient.
   Running time will be O(k·log^3 n), k=30.
   """
   import RockerAssignment.Utils.Debug
   alias RockerAssignment.CheckPrime.{Jacobian, Modulo}
 
-  def prime?(p, iterations) do
+  def prime?(p, iterations \\ 30) do
     a =
     cond do
       p < 2 -> false
