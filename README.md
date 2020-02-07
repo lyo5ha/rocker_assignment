@@ -176,7 +176,29 @@ Content-Type: application/json
 
 ```
 
+# Realization notes
 
+## Validations
+
+Fields should be present and be in correct format:
+- name
+- email
+- phone
+
+One email should be connected with one name.
+
+## Prime numbers check
+
+  There is a implementation of Solovay–Strassen primality test,
+  which is  probabilistic. Chance of wrong answer with 30 iterations
+  will be 1 of 1073741824, which could be considered as sufficient.
+  Running time will be O(k·log^3 n), k=30.
+
+## Loan amounts
+
+  Highest loan amount form all requests keeps in Genserver in-memory.
+  When application restarts, this highest amount resets to 0. Then first loan
+  amount writes as highest.
 
 
 # Technical Assignment - Elixir
