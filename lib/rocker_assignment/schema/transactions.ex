@@ -37,4 +37,11 @@ defmodule RockerAssignment.Schema.Transactions do
   end
 
   def get_user(%{email: email} = _params),  do: Repo.get_by(User, email: email)
+
+  def get_all_loans do
+    result = Loan
+    |> Repo.all
+    |> Repo.preload(:user)
+    {:ok, result}
+  end
 end

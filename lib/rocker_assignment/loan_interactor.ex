@@ -5,6 +5,8 @@ defmodule RockerAssignment.LoanInteractor do
   alias RockerAssignment.Schema.Transactions
   alias RockerAssignment.CreditRegulation
 
+  import RockerAssignment.Utils.Debug
+
   def new_loan(params) do
     map = parse_params(params)
     with {:ok, user}            <- get_user(map),
@@ -32,6 +34,25 @@ defmodule RockerAssignment.LoanInteractor do
     end
   end
 
+
+  def send_all_loans(conn) do
+    with {:ok, loans} <- Transactions.get_all_loans,
+         {:ok, json} <- serialize_response_all(loans) do
+      send_response(conn, json)
+    else
+      {:error, error} ->
+        logger(error, "error form send_all_loans")
+      {:error, error}
+    end
+  end
+
+    def send_response(conn, json) do
+      conn
+      |> Plug.Conn.put_resp_header("content-type", "application/json; charset=utf-8")
+      |> Plug.Conn.send_resp(200, json)
+    end
+
+
   defp parse_params(params) do
     %{
         amount: params["data"]["amount"],
@@ -40,7 +61,6 @@ defmodule RockerAssignment.LoanInteractor do
         phone:  params["data"]["user"]["phone"]
       }
   end
-
 
   defp serialize_response({:ok, loan} = _params) do
     %{
@@ -67,9 +87,33 @@ defmodule RockerAssignment.LoanInteractor do
     |> Jason.encode
   end
 
-  def send_response(conn, json) do
-    conn
-    |> Plug.Conn.put_resp_header("content-type", "application/json; charset=utf-8")
-    |> Plug.Conn.send_resp(200, json)
+  defp serialize_response_all(loans) do
+    loan_list = Enum.map(loans, fn(x) -> form_loans_list(x) end)
+    json = Jason.encode!(loan_list)
+    logger(json, "json from serialize response_all")
+    {:ok, json}
+  end
+
+  def form_loans_list(loan) do
+    rate =
+      case loan.rate do
+        nil -> nil
+        _ -> loan.rate/100
+      end
+    # logger(loan, "loan form form_loans_list")
+    %{
+      data: %{
+        type: "loan",
+        amount: loan.amount,
+        id: loan.id,
+        user: %{
+          name: loan.user.name,
+          phone: loan.user.phone,
+          email: loan.user.email
+        },
+        status: loan.status,
+        rate: rate
+      }
+    }
   end
 end

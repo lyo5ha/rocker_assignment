@@ -15,4 +15,8 @@ defmodule RockerAssignmentWeb.LoanApplicationController do
       {:error, error_params}  -> conn |> ErrorResolver.call(error_params)
     end
   end
+
+  def all(conn, _params) do
+    LoanInteractor.send_all_loans(conn)
+  end
 end
