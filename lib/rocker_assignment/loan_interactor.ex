@@ -89,7 +89,7 @@ defmodule RockerAssignment.LoanInteractor do
 
   defp serialize_response_all(loans) do
     loan_list = Enum.map(loans, fn(x) -> form_loans_list(x) end)
-    json = Jason.encode!(loan_list)
+    json = Jason.encode!(%{jsonapi: %{version: "1.0"}, data: loan_list})
     logger(json, "json from serialize response_all")
     {:ok, json}
   end
@@ -102,18 +102,16 @@ defmodule RockerAssignment.LoanInteractor do
       end
     # logger(loan, "loan form form_loans_list")
     %{
-      data: %{
-        type: "loan",
-        amount: loan.amount,
-        id: loan.id,
-        user: %{
-          name: loan.user.name,
-          phone: loan.user.phone,
-          email: loan.user.email
-        },
-        status: loan.status,
-        rate: rate
-      }
+      type: "loan",
+      amount: loan.amount,
+      id: loan.id,
+      user: %{
+        name: loan.user.name,
+        phone: loan.user.phone,
+        email: loan.user.email
+      },
+      status: loan.status,
+      rate: rate
     }
   end
 end
